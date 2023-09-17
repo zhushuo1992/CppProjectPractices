@@ -1,0 +1,3 @@
+D:/git/CppProjectPractices/ThreadPool/cmake-build-debug/CMakeFiles/ThreadPool.dir
+D:/git/CppProjectPractices/ThreadPool/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/git/CppProjectPractices/ThreadPool/cmake-build-debug/CMakeFiles/rebuild_cache.dir
