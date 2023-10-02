@@ -19,7 +19,7 @@ struct TaskHints{
     int64_t io_size = -1;
     int64_t cpu_cost = -1;
     int64_t external_id = -1;
-};
+}; //好像没用
 
 class  ARROW_EXPORT Executor{
 public:
@@ -60,6 +60,8 @@ public:
     {
         return spawn_real(hints, std::forward<Function>(func), std::move(stop_token), std::move(stop_callback));
     }
+
+    //继承的子类threadpool用
 
     template<typename Function, typename... Args,
             typename  ReturnType = typename std::result_of<Function(Args...)>::type>

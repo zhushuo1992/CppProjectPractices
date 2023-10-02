@@ -18,7 +18,7 @@ namespace arrow{
 
 class StopToken;
 
-struct StopSourceImpl;
+struct StopSourceImpl; //里面3个变量，代表是否停止
 
 class ARROW_EXPORT StopSource{
 

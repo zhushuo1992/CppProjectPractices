@@ -36,7 +36,7 @@ int main() {
     }
     for(int i = 1; i<=2; ++i)
     {
-        thread_pool_1->spawn([i](){task(i);});
+        thread_pool_1->spawn([i](){task(i);});// 也可以submit
     }
     thread_pool_1->wait_for_idle();
 

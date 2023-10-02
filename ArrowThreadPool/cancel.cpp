@@ -16,8 +16,8 @@ namespace arrow{
 #endif
 
 struct StopSourceImpl{
-   std::atomic<int> m_requested {0};
-   std::mutex m_mutex;
+   std::atomic<int> m_requested {0}; //是否停止 非0代表停止
+   std::mutex m_mutex; //不同的线程可能都会操作停止，所有有个锁
    Status m_cancel_error;
 }; //接口实现
 
@@ -64,7 +64,7 @@ struct StopSourceImpl{
     }
 
 
-    Status StopToken::poll() const {
+    Status StopToken::poll() const { //获取状态
         if (!m_impl)
         {
             return  Status::make_ok();

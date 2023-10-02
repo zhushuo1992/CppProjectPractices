@@ -23,9 +23,9 @@ Executor::~Executor() = default;
 
 namespace {
     struct Task{
-        internal::FnOnce<void()> callable;
-        StopToken stop_token;
-        Executor::StopCallback stop_callback;
+        internal::FnOnce<void()> callable; //函数 子任务
+        StopToken stop_token; //停止后的操作：存储是否被停止等信息
+        Executor::StopCallback stop_callback; //取消的时候回调函数
     };
 
 }
@@ -58,7 +58,7 @@ static void worker_loop(std::shared_ptr<ThreadPool::State> state,
     {
         return state->m_workers.size() > static_cast<size_t> (state->m_desired_capacity);
 
-    };
+    }; //当前正在执行任务数是不是大于设定的容量
 
     while(true)
     {
@@ -77,13 +77,13 @@ static void worker_loop(std::shared_ptr<ThreadPool::State> state,
                 state->m_pending_tasks.pop_front();
                 StopToken* pt_stop_token = &task.stop_token;
                 lock.unlock();
-                if(!pt_stop_token->is_stop_requested())
+                if(!pt_stop_token->is_stop_requested()) //开始执行一个新任务之前，检查一下，发现被停止了，不执行任务，而去执行回调
                 {
                     std::move(task.callable)();
                 }
                 else
                 {
-                    if(task.stop_callback)
+                    if(task.stop_callback) //这个库只有手动终止或者被signal杀了才会调用回调
                     {
                         std::move(task.stop_callback)(pt_stop_token->poll());
                     }
@@ -92,6 +92,8 @@ static void worker_loop(std::shared_ptr<ThreadPool::State> state,
                 ARROW_UNUSED(std::move(task));
                 lock.lock();
             }
+
+            //这个worker任务执行结束了，将m_tasks_queued_or_running减1
             if(ARROW_PREDICT_FALSE(--state->m_tasks_queued_or_running == 0))
             {
                 state->m_cv_idle.notify_all();
@@ -101,9 +103,9 @@ static void worker_loop(std::shared_ptr<ThreadPool::State> state,
         if (state->m_please_shutdown || should_secede())
         {
             break;
-        }
+        } //销毁当前这个worker线程
 
-        state->m_cv.wait(lock);
+        state->m_cv.wait(lock); //等待任务cv通知
     }
 
     DCHECK_GE(state->m_tasks_queued_or_running, 0);
@@ -166,7 +168,7 @@ Status ThreadPool::set_capacity(int threads) {
 
     collect_finish_workers_unlocked();
 
-    m_state->m_desired_capacity = threads;
+    m_state->m_desired_capacity = threads; //运行后也能调整
 
     const int required = std::min(static_cast<int>(m_state->m_pending_tasks.size()),threads - static_cast<int>(m_state->m_workers.size()));
 
@@ -176,7 +178,7 @@ Status ThreadPool::set_capacity(int threads) {
     }
     else if(required < 0)
     {
-        m_state->m_cv.notify_all();
+        m_state->m_cv.notify_all(); //销毁部分
     }
 
     return Status::make_ok();
@@ -214,8 +216,12 @@ Status ThreadPool::shut_down(bool wait) {
 
     m_state->m_please_shutdown = true;
     m_state->m_quick_shutdown = !wait;
-    m_state->m_cv.notify_all();
-    m_state->m_cv_shutdown.wait(lock, [this]{return m_state->m_workers.empty();});
+    m_state->m_cv.notify_all(); //唤醒所有worker线程
+
+    //只有当 pred 条件为 false 时调用 wait() 才会阻塞当前线程，并且在收到其他线程的通知后只有当 pred 为 true 时才会被解除阻塞。
+    // 因此第二种情况类似以下代码：
+    //while (!pred()) wait(lck);
+    m_state->m_cv_shutdown.wait(lock, [this]{return m_state->m_workers.empty();}); //等待所有worker线程退出
     if(!m_state->m_quick_shutdown)
     {
         DCHECK_EQ(m_state->m_pending_tasks.size(), 0);
@@ -251,16 +257,17 @@ void ThreadPool::launch_workers_unlocked(int threads) {
 
     for(int i = 0; i < threads; i++)
     {
-        m_state->m_workers.emplace_back();
-        auto it = --(m_state->m_workers.end());
+        m_state->m_workers.emplace_back(); //建一个空（默认）对象
+        auto it = --(m_state->m_workers.end()); //找到刚刚那个对象
         *it = std::thread([this, state, it]
                           {
                             current_thread_pool_ = this;
-                              worker_loop(state, it);
+                              worker_loop(state, it); //这个线程被建立了，但是要等待
                           });
     }
 }
 
+//实现了父类纯虚函数
 Status ThreadPool::spawn_real(TaskHints hints, internal::FnOnce<void()> task, StopToken stop_token, StopCallback && stop_callback)
 {
     {

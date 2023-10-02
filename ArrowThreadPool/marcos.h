@@ -11,12 +11,15 @@
 
 #define ARROW_PREDICT_FALSE(x) (__builtin_expect(!!(x), 0))
 
+//触发signal
+
 #define DCHECK_GE(val1, val2) \
   do { \
     if (!((val1) >= (val2))) { \
       std::abort(); \
     } \
   } while (false)
+
 
 #define DCHECK_EQ(val1, val2) \
   do { \
