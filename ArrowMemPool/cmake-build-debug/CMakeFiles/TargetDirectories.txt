@@ -1,0 +1,3 @@
+D:/git/CppProjectPractices/ArrowMemPool/cmake-build-debug/CMakeFiles/ArrowMemPool.dir
+D:/git/CppProjectPractices/ArrowMemPool/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/git/CppProjectPractices/ArrowMemPool/cmake-build-debug/CMakeFiles/rebuild_cache.dir

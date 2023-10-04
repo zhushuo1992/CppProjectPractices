@@ -1,0 +1,7 @@
+# ninja log v5
+24	1266	7180411250137021	CMakeFiles/ArrowMemPool.dir/string_builder.cpp.obj	e473428554e2ad23
+9	1278	7180411250424645	CMakeFiles/ArrowMemPool.dir/main.cpp.obj	b7fc6bf3cd58a05b
+19	1289	7180411250504548	CMakeFiles/ArrowMemPool.dir/allocator.cpp.obj	45eb7b47c9a23639
+1	1291	7180411250534593	CMakeFiles/ArrowMemPool.dir/io_util.cpp.obj	af745daaba5bedb7
+15	2068	7180411258294558	CMakeFiles/ArrowMemPool.dir/memory_pool.cpp.obj	851cfd5cd83463c3
+2069	2630	7180411263891917	ArrowMemPool.exe	3a89144e8a0e883b
