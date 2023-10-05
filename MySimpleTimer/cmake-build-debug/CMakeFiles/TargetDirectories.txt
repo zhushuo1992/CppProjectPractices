@@ -1,0 +1,3 @@
+D:/git/CppProjectPractices/MySimpleTimer/cmake-build-debug/CMakeFiles/MySimpleTimer.dir
+D:/git/CppProjectPractices/MySimpleTimer/cmake-build-debug/CMakeFiles/edit_cache.dir
+D:/git/CppProjectPractices/MySimpleTimer/cmake-build-debug/CMakeFiles/rebuild_cache.dir

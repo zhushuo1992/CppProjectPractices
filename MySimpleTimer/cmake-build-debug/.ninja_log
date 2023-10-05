@@ -1,0 +1,10 @@
+# ninja log v5
+1	1931	7181319695105479	CMakeFiles/MySimpleTimer.dir/main.cpp.obj	902d7706f045c507
+8	3161	7181319707306477	CMakeFiles/MySimpleTimer.dir/my_simple_timer.cpp.obj	a2b4a4300d5924eb
+3162	3987	7181319715631475	MySimpleTimer.exe	8b53a7cb30e3456c
+5	861	7181322936566812	CMakeFiles/MySimpleTimer.dir/main.cpp.obj	902d7706f045c507
+862	1332	7181322941289812	MySimpleTimer.exe	8b53a7cb30e3456c
+9	1539	7181330385314108	CMakeFiles/MySimpleTimer.dir/main.cpp.obj	902d7706f045c507
+1541	2271	7181330392582890	MySimpleTimer.exe	8b53a7cb30e3456c
+10	1541	7181330835810338	CMakeFiles/MySimpleTimer.dir/main.cpp.obj	902d7706f045c507
+1542	2195	7181330842338873	MySimpleTimer.exe	8b53a7cb30e3456c
